@@ -36,6 +36,21 @@
 								"ds_v_DBName": "ENTDWDB",
 								"ds_v_TableName": "tbl_employee"
 							}
+						},
+						"linkedServiceParameters": {
+							"source2": {
+								"schemaLinkedService": {
+									"ds_v_Blob_Container": "azurecontainer",
+									"ds_v_Blob_Directory": "Input",
+									"ds_v_Blob_File": "employees.csv"
+								}
+							},
+							"sink2": {
+								"schemaLinkedService": {
+									"ds_v_DBName": "entdwdb",
+									"ds_v_TableName": "tbl_employee"
+								}
+							}
 						}
 					},
 					"compute": {
@@ -46,9 +61,6 @@
 				}
 			}
 		],
-		"folder": {
-			"name": "DataFlows"
-		},
 		"annotations": []
 	}
 }

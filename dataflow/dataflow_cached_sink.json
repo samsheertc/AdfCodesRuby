@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "CSV_Blob_DataSet",
+						"referenceName": "AzureBlobCSV",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -58,20 +58,10 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     query: 'select ISNULL(max(empid),0) maxempid from ENTDWDB.[dbo].[tbl_employee]\\n',",
 				"     format: 'query') ~> source1",
-				"source(output(",
-				"          empname as string,",
-				"          gender as string,",
-				"          country as string,",
-				"          salary as integer",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2",
-				"source(output(",
-				"          country_code as string,",
-				"          country_name as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source3",
