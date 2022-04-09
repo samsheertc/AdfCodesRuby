@@ -58,10 +58,20 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     query: 'select ISNULL(max(empid),0) maxempid from ENTDWDB.[dbo].[tbl_employee]\\n',",
 				"     format: 'query') ~> source1",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          empname as string,",
+				"          gender as string,",
+				"          country as string,",
+				"          salary as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          country_code as string,",
+				"          country_name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source3",
@@ -99,11 +109,7 @@
 				"     store: 'cache',",
 				"     format: 'inline',",
 				"     output: false,",
-				"     saveOrder: 1,",
-				"     mapColumn(",
-				"          country_code,",
-				"          country_name",
-				"     )) ~> CountryName"
+				"     saveOrder: 1) ~> CountryName"
 			]
 		}
 	}
