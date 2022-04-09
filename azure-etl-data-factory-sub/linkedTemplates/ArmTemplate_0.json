@@ -646,6 +646,9 @@
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"folder": {
+					"name": "CacheSink"
+				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
 					"sources": [
@@ -747,6 +750,9 @@
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"folder": {
+					"name": "CacheSink"
+				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
 					"sources": [
@@ -799,6 +805,9 @@
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"folder": {
+					"name": "CacheSink"
+				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
 					"sources": [
@@ -1236,6 +1245,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "CacheSink"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1295,6 +1307,9 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CacheSink"
 				},
 				"annotations": []
 			},
@@ -1374,6 +1389,9 @@
 					"MaxSalVar": {
 						"type": "String"
 					}
+				},
+				"folder": {
+					"name": "CacheSink"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-04-07T15:34:15Z"
