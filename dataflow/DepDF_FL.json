@@ -26,15 +26,41 @@
 			],
 			"transformations": [
 				{
-					"name": "flowlet1"
+					"name": "flowlet1",
+					"flowlet": {
+						"referenceName": "FlowLet",
+						"type": "DataFlowReference"
+					}
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          id as short,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 compose(composition: 'undefined') ~> flowlet1@()",
-				"flowlet1 sink(allowSchemaDrift: true,",
+				"derivedColumn1 compose(mapColumn(",
+				"          id,",
+				"          name,",
+				"          gender",
+				"     ),",
+				"     composition: 'FlowLet') ~> flowlet1@(output1)",
+				"source1 derive(gender = 'XXX') ~> derivedColumn1",
+				"flowlet1@output1 select(mapColumn(",
+				"          id,",
+				"          name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['Employee_rmd.csv'],",
 				"     skipDuplicateMapInputs: true,",
