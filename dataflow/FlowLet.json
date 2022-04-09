@@ -40,7 +40,11 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 output() ~> output1"
+				"select1 output(mapColumn(",
+				"          id,",
+				"          name,",
+				"          gender",
+				"     )) ~> output1"
 			]
 		}
 	}
