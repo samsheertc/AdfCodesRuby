@@ -1011,7 +1011,7 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     query: 'select ISNULL(max(empid),0) maxempid from ENTDWDB.[dbo].[tbl_employee]\\n',",
+						"     query: 'select ISNULL(max(empid),999) maxempid from ENTDWDB.[dbo].[tbl_employee]\\n',",
 						"     format: 'query') ~> source1",
 						"source(output(",
 						"          empname as string,",
