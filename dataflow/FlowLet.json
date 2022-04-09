@@ -1,6 +1,9 @@
 {
 	"name": "FlowLet",
 	"properties": {
+		"folder": {
+			"name": "FlowLet"
+		},
 		"type": "Flowlet",
 		"typeProperties": {
 			"sources": [],
