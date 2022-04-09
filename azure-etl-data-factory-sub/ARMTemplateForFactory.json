@@ -207,6 +207,66 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_cache_sink_multiple_column')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "dataflow_cache_sink_multiple_column",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow_cache_sink_multiple_column",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Input",
+										"ds_v_Blob_File": "employees.csv"
+									},
+									"source2": {
+										"ds_v_DBName": "entdwdb",
+										"ds_v_TableName": "tbl_employee"
+									},
+									"sink1": {},
+									"TargetSink": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Output",
+										"ds_v_Blob_File": "ssss"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow_cache_sink_multiple_column')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_cache_sink_to_activity')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -905,6 +965,107 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_cache_sink_multiple_column')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "AzureBlobCSV",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureSqlTable",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"name": "sink1"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureBlobCSV",
+								"type": "DatasetReference"
+							},
+							"name": "TargetSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          empid as integer,",
+						"          name as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source(output(",
+						"          empid as integer,",
+						"          empname as string,",
+						"          gender as string,",
+						"          countryName as string,",
+						"          salary as integer,",
+						"          AddressLine1 as string,",
+						"          AddressLine2 as string,",
+						"          City as string,",
+						"          State as string,",
+						"          ZipCode as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source2",
+						"source1 derive(Country = sink1#lookup(empid,name).countryName,",
+						"          Salary = sink1#lookup(empid,name).salary) ~> derivedColumn1",
+						"source2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     keys:['empid','empname'],",
+						"     store: 'cache',",
+						"     format: 'inline',",
+						"     output: false,",
+						"     saveOrder: 1,",
+						"     mapColumn(",
+						"          empid,",
+						"          empname,",
+						"          gender,",
+						"          countryName,",
+						"          salary,",
+						"          AddressLine1,",
+						"          AddressLine2,",
+						"          City,",
+						"          State,",
+						"          ZipCode",
+						"     )) ~> sink1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['CacheSinl_MultipleCol.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> TargetSink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AzureBlobCSV')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dataflow_cache_sink_to_activity')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1274,94 +1435,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTable')]",
 				"[concat(variables('factoryId'), '/datasets/AzureBlobCSV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow_cache_sink_multiple_column')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "AzureBlobCSV",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						},
-						{
-							"dataset": {
-								"referenceName": "AzureSqlTable",
-								"type": "DatasetReference"
-							},
-							"name": "source2"
-						}
-					],
-					"sinks": [
-						{
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          empid as integer,",
-						"          name as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source1",
-						"source(output(",
-						"          empid as integer,",
-						"          empname as string,",
-						"          gender as string,",
-						"          countryName as string,",
-						"          salary as integer,",
-						"          AddressLine1 as string,",
-						"          AddressLine2 as string,",
-						"          City as string,",
-						"          State as string,",
-						"          ZipCode as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> source2",
-						"source1 derive(Country = sink1#lookup(empid,name).countryName,",
-						"          Salary = sink1#lookup(empid,name).salary) ~> derivedColumn1",
-						"source2 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     keys:['empid','empname'],",
-						"     store: 'cache',",
-						"     format: 'inline',",
-						"     output: false,",
-						"     saveOrder: 1,",
-						"     mapColumn(",
-						"          empid,",
-						"          empname,",
-						"          gender,",
-						"          countryName,",
-						"          salary,",
-						"          AddressLine1,",
-						"          AddressLine2,",
-						"          City,",
-						"          State,",
-						"          ZipCode",
-						"     )) ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureBlobCSV')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable')]"
 			]
 		}
 	]
