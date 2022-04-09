@@ -1,6 +1,9 @@
 {
 	"name": "dataflow_cache_sink_multiple_column",
 	"properties": {
+		"folder": {
+			"name": "CacheSink"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

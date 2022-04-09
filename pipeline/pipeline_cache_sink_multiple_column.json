@@ -43,6 +43,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "CacheSink"
+		},
 		"annotations": []
 	}
 }
