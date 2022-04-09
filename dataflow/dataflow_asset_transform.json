@@ -1,0 +1,83 @@
+{
+	"name": "dataflow_asset_transform",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "assert1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "filter1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as short,",
+				"          name as string,",
+				"          gender as string,",
+				"          doj as string,",
+				"          depid as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          departmentid as short,",
+				"          depname as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1, source2 assert(expectTrue(!isNull(toDate(doj, 'yyyyMMdd')), false, 'assert_date_check', null, 'Check if the date has proper format'),",
+				"     expectUnique(empid, false, 'assert_unique_check', null, 'Check Unique Emp Id'),",
+				"     expectExists(depid == departmentid, false, 'assert_dep_check', null, 'Check if department exist')) ~> assert1",
+				"assert1 derive(isErrorRow = isError(),",
+				"          isNonUniqueRow = hasError('assert_unique_check'),",
+				"          isDepNonExistRow = hasError('assert_dep_check')) ~> derivedColumn1",
+				"derivedColumn1 filter(isDepNonExistRow==false()) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Employee_Asset.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          empid,",
+				"          name,",
+				"          gender,",
+				"          doj,",
+				"          depid",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,72 @@
+{
+	"name": "dataflow_parse_transform",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "parse1"
+				},
+				{
+					"name": "parse2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as integer,",
+				"          empname as string,",
+				"          skills as string,",
+				"          address as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 parse(ParsedSkills = skills ? (skill1 as string,",
+				"          skill2 as string,",
+				"          skill3 as string),",
+				"     format: 'delimited',",
+				"     columnNamesAsHeader: false,",
+				"     columnDelimiter: '|',",
+				"     nullValue: '') ~> parse1",
+				"parse1 parse(ParsedAddress = address ? (city as string,",
+				"          Country as string),",
+				"     format: 'json',",
+				"     documentForm: 'singleDocument') ~> parse2",
+				"parse2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Employee_Parsed.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          empid,",
+				"          empname,",
+				"          skill1 = ParsedSkills.skill1,",
+				"          skill2 = ParsedSkills.skill2,",
+				"          skill3 = ParsedSkills.skill3,",
+				"          City = ParsedAddress.city,",
+				"          Country = ParsedAddress.Country",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

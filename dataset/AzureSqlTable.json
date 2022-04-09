@@ -1,0 +1,36 @@
+{
+	"name": "AzureSqlTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ls_v_DBName": {
+					"value": "@dataset().ds_v_DBName",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"ds_v_DBName": {
+				"type": "string",
+				"defaultValue": "entdwdb"
+			},
+			"ds_v_TableName": {
+				"type": "string",
+				"defaultValue": "tbl_employee"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().ds_v_TableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

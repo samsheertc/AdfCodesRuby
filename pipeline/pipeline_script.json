@@ -1,0 +1,73 @@
+{
+	"name": "pipeline_script",
+	"properties": {
+		"activities": [
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ls_v_DBName": "entdwdb"
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "Log",
+									"type": "String",
+									"value": "Session Logs",
+									"direction": "Input"
+								},
+								{
+									"name": "Col1",
+									"type": "String",
+									"value": "country_code",
+									"direction": "Input"
+								},
+								{
+									"name": "Col2",
+									"type": "String",
+									"value": "empid",
+									"direction": "Input"
+								},
+								{
+									"name": "T1",
+									"type": "String",
+									"value": "tbl_country",
+									"direction": "Input"
+								},
+								{
+									"name": "T2",
+									"type": "String",
+									"value": "tbl_employee",
+									"direction": "Input"
+								}
+							],
+							"type": "Query",
+							"text": "EXEC('SELECT TOP (5)'+@Col1+' FROM ' + @T1)\nEXEC('SELECT '+@Col2+' FROM ' + @T2)\nEXEC('SELECT '''+@Log+''' AS SESSION_LOGS')\nselect @Log as LogDetail\nprint  @Log"
+						}
+					],
+					"logSettings": {
+						"logDestination": "ActivityOutput"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-04-08T05:52:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

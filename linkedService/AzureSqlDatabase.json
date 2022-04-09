@@ -1,0 +1,17 @@
+{
+	"name": "AzureSqlDatabase",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"ls_v_DBName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=pazuresqldb.database.windows.net;initial catalog=@{linkedService().ls_v_DBName};user id=ive2383",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEVGOThEQTYxLUFCNzUtNDg4Qy05OTI2LTEyNUNGMUI3MTBFNl8wNzA0NmVlOS1jYThmLTQzMzMtYWVmOS1mNTJmYjRiMmE4ZjgiDQp9"
+		}
+	}
+}

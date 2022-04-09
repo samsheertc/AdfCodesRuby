@@ -1,0 +1,45 @@
+{
+	"name": "pipeline_parse_transform",
+	"properties": {
+		"activities": [
+			{
+				"name": "dataflow_parse_transform",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow_parse_transform",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source1": {
+								"ds_v_DBName": "entdwdb",
+								"ds_v_TableName": "tbl_employee"
+							},
+							"sink1": {
+								"ds_v_Blob_Container": "azurecontainer",
+								"ds_v_Blob_Directory": "Output",
+								"ds_v_Blob_File": "employees.csv"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-04-07T15:41:16Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

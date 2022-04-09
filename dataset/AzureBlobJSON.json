@@ -1,0 +1,44 @@
+{
+	"name": "AzureBlobJSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_v_Blob_Container": {
+				"type": "string",
+				"defaultValue": "azurecontainer"
+			},
+			"ds_v_Blob_Directory": {
+				"type": "string",
+				"defaultValue": "Input"
+			},
+			"ds_v_Blob_File": {
+				"type": "string",
+				"defaultValue": "Input.json"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().ds_v_Blob_File",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().ds_v_Blob_Directory",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().ds_v_Blob_Container",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
