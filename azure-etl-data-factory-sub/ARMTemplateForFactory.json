@@ -174,7 +174,10 @@
 										"ds_v_DBName": "entdwdb",
 										"ds_v_TableName": "tbl_country"
 									},
-									"source4": {},
+									"source4": {
+										"ds_v_DBName": "entdwdb",
+										"ds_v_TableName": "tbl_address"
+									},
 									"MaxEmpID": {},
 									"sink2": {
 										"ds_v_DBName": "entdwdb",
@@ -1097,7 +1100,8 @@
 						"          City,",
 						"          State,",
 						"          ZipCode",
-						"     )) ~> sink2",
+						"     ),",
+						"     partitionBy('hash', 1)) ~> sink2",
 						"source3 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     skipDuplicateMapInputs: true,",
