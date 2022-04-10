@@ -1954,6 +1954,7 @@
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"description": "3. Incrementally copy new and changed files based on Last Modified Date in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=q6eqH22SGBE&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=4&ab_channel=WafaStudies",
 				"activities": [
 					{
 						"name": "Copy data1",
