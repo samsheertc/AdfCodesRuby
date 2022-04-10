@@ -1,6 +1,7 @@
 {
-	"name": "pipeline1",
+	"name": "2_pipeline",
 	"properties": {
+		"description": "2. Get File Names from Source Folder Dynamically in Azure Data Factory\n",
 		"activities": [
 			{
 				"name": "Get Metadata1",
