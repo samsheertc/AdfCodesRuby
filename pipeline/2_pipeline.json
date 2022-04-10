@@ -1,7 +1,7 @@
 {
 	"name": "2_pipeline",
 	"properties": {
-		"description": "2. Get File Names from Source Folder Dynamically in Azure Data Factory\n",
+		"description": "2. Get File Names from Source Folder Dynamically in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=L165TgZZfHk&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=2&ab_channel=WafaStudies",
 		"activities": [
 			{
 				"name": "Get Metadata1",
