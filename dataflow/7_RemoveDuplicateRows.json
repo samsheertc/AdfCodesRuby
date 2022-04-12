@@ -63,12 +63,20 @@
 				"     ignoreNoFilesFound: false) ~> source2",
 				"source1, source2 union(byName: true)~> union1",
 				"union1 aggregate(groupBy(empid),",
-				"     each(match(name != 'empid'), $$ = first($$))) ~> aggregate1",
+				"     each(match(name!='empid'), $$ = first($$))) ~> aggregate1",
 				"aggregate1 sort(asc(empid, true)) ~> sort1",
 				"sort1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['employees_rmd.csv'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          empid,",
+				"          empname,",
+				"          country,",
+				"          department",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

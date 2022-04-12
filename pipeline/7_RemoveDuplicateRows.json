@@ -18,7 +18,14 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "7_RemoveDuplicateRows",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sink1": {
+								"ds_v_Blob_Container": "azurecontainer",
+								"ds_v_Blob_Directory": "Output",
+								"ds_v_Blob_File": "xxxx.csv"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
