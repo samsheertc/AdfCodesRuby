@@ -20,6 +20,16 @@
 						"referenceName": "7_RemoveDuplicateRows",
 						"type": "DataFlowReference",
 						"datasetParameters": {
+							"source1": {
+								"ds_v_Blob_Container": "azurecontainer",
+								"ds_v_Blob_Directory": "Input",
+								"ds_v_Blob_File": "employee1.csv"
+							},
+							"source2": {
+								"ds_v_Blob_Container": "azurecontainer",
+								"ds_v_Blob_Directory": "Input",
+								"ds_v_Blob_File": "employee2.csv"
+							},
 							"sink1": {
 								"ds_v_Blob_Container": "azurecontainer",
 								"ds_v_Blob_Directory": "Output",
