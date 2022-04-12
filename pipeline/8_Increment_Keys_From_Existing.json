@@ -20,25 +20,20 @@
 						"referenceName": "Increment_Keys_From_Existing_1",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"source1": {
+							"AllEmp1": {
+								"ds_v_Blob_Container": "azurecontainer",
+								"ds_v_Blob_Directory": "Input",
+								"ds_v_Blob_File": "AllEmployee.csv"
+							},
+							"Delta": {
 								"ds_v_Blob_Container": "azurecontainer",
 								"ds_v_Blob_Directory": "Input",
 								"ds_v_Blob_File": "employees.csv"
 							},
-							"source2": {
+							"AllEmp": {
 								"ds_v_Blob_Container": "azurecontainer",
 								"ds_v_Blob_Directory": "Input",
-								"ds_v_Blob_File": "employees.csv"
-							},
-							"source3": {
-								"ds_v_Blob_Container": "azurecontainer",
-								"ds_v_Blob_Directory": "Input",
-								"ds_v_Blob_File": "employees.csv"
-							},
-							"sink2": {
-								"ds_v_Blob_Container": "azurecontainer",
-								"ds_v_Blob_Directory": "Input",
-								"ds_v_Blob_File": "employees.csv"
+								"ds_v_Blob_File": "AllEmployee.csv"
 							}
 						}
 					},
