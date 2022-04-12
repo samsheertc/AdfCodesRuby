@@ -1034,7 +1034,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/7_RemoveDuplicateRows')]",
+			"name": "[concat(parameters('factoryName'), '/RemoveDuplicateRows')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1046,14 +1046,14 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "DelimitedText1",
+								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
 						},
 						{
 							"dataset": {
-								"referenceName": "DelimitedText2",
+								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
 							"name": "source2"
@@ -1081,26 +1081,26 @@
 					],
 					"scriptLines": [
 						"source(output(",
-						"          empid as short,",
+						"          empid as string,",
 						"          empname as string,",
 						"          country as string,",
-						"          department as short",
+						"          department as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> source1",
 						"source(output(",
-						"          empid as short,",
+						"          empid as string,",
 						"          empname as string,",
 						"          country as string,",
-						"          department as short",
+						"          department as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> source2",
 						"source1, source2 union(byName: true)~> union1",
 						"union1 aggregate(groupBy(empid),",
-						"     each(match(name != 'empid'), $$ = first($$))) ~> aggregate1",
+						"     each(match(name!='empid'), $$ = first($$))) ~> aggregate1",
 						"aggregate1 sort(asc(empid, true)) ~> sort1",
 						"sort1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -1118,8 +1118,6 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]",
 				"[concat(variables('factoryId'), '/datasets/AzureBlobCSV')]"
 			]
 		},
