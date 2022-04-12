@@ -9,14 +9,14 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "AzureBlobCSV",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
 				},
 				{
 					"dataset": {
-						"referenceName": "DelimitedText2",
+						"referenceName": "AzureBlobCSV",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -43,27 +43,15 @@
 				}
 			],
 			"scriptLines": [
-				"source(output(",
-				"          empid as short,",
-				"          empname as string,",
-				"          country as string,",
-				"          department as short",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source(output(",
-				"          empid as short,",
-				"          empname as string,",
-				"          country as string,",
-				"          department as short",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2",
 				"source1, source2 union(byName: true)~> union1",
 				"union1 aggregate(groupBy(empid),",
-				"     each(match(name != 'empid'), $$ = first($$))) ~> aggregate1",
+				"     each(match(name!='empid'), $$ = first($$))) ~> aggregate1",
 				"aggregate1 sort(asc(empid, true)) ~> sort1",
 				"sort1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
