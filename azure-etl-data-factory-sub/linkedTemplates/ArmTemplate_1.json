@@ -569,7 +569,11 @@
 								"datasetParameters": {
 									"source1": {},
 									"source2": {},
-									"sink1": {}
+									"sink1": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Output",
+										"ds_v_Blob_File": "xxxx.csv"
+									}
 								}
 							},
 							"staging": {},
