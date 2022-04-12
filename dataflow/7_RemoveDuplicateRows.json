@@ -1,6 +1,9 @@
 {
 	"name": "7_RemoveDuplicateRows",
 	"properties": {
+		"folder": {
+			"name": "RealTime"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -10,13 +13,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "AzureBlobCSV",
-						"type": "DatasetReference"
-					},
-					"name": "source2"
 				}
 			],
 			"sinks": [],
@@ -24,10 +20,7 @@
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source2"
+				"     ignoreNoFilesFound: false) ~> source1"
 			]
 		}
 	}
