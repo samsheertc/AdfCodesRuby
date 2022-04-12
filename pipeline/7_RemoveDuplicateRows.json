@@ -2,6 +2,39 @@
 	"name": "7_RemoveDuplicateRows",
 	"properties": {
 		"description": "7. Remove Duplicate Rows using Mapping Data Flows in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=YDRn_arRtjA&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=7&ab_channel=WafaStudies",
+		"activities": [
+			{
+				"name": "7_RemoveDuplicateRows",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "7_RemoveDuplicateRows",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source1": {
+								"ds_v_Blob_Container": "azurecontainer",
+								"ds_v_Blob_Directory": "Input",
+								"ds_v_Blob_File": "employees.csv"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
 		"folder": {
 			"name": "RealTIme"
 		},
