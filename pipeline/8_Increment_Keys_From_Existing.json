@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "8_Increment_Keys_From_Existing",
 	"properties": {
 		"description": "8. Increment Keys from Existing Source Using Mapping Data Flow in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=SHomaQlxpno&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=8&ab_channel=WafaStudies",
 		"activities": [
@@ -17,7 +17,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
+						"referenceName": "Increment_Keys_From_Existing_1",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"source1": {
