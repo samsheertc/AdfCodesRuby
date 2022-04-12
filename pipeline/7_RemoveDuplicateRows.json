@@ -17,7 +17,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "7_RemoveDuplicateRows",
+						"referenceName": "RemoveDuplicateRows",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"source1": {
