@@ -428,7 +428,7 @@
 				"description": "8. Increment Keys from Existing Source Using Mapping Data Flow in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=SHomaQlxpno&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=8&ab_channel=WafaStudies",
 				"activities": [
 					{
-						"name": "dataflow1",
+						"name": "Increment_Keys_From_Existing_1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -445,26 +445,26 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source1": {
+									"AllEmp1": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "AllEmployee.csv"
 									},
-									"source2": {
+									"AllEmp2": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "AllEmployee.csv"
 									},
-									"source3": {
+									"Delta": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "DeltaEmployee.csv"
 									},
 									"sink1": {},
-									"sink2": {
+									"AllEmp": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "AllEmployee.csv"
 									}
 								}
 							},

@@ -490,7 +490,7 @@
 				"description": "8. Increment Keys from Existing Source Using Mapping Data Flow in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=SHomaQlxpno&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=8&ab_channel=WafaStudies",
 				"activities": [
 					{
-						"name": "dataflow1",
+						"name": "Increment_Keys_From_Existing_1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -507,26 +507,26 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source1": {
+									"AllEmp1": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "AllEmployee.csv"
 									},
-									"source2": {
+									"AllEmp2": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "AllEmployee.csv"
 									},
-									"source3": {
+									"Delta": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "DeltaEmployee.csv"
 									},
 									"sink1": {},
-									"sink2": {
+									"AllEmp": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "employees.csv"
+										"ds_v_Blob_File": "AllEmployee.csv"
 									}
 								}
 							},
@@ -1423,21 +1423,21 @@
 								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
-							"name": "source1"
+							"name": "AllEmp1"
 						},
 						{
 							"dataset": {
 								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
-							"name": "source2"
+							"name": "AllEmp2"
 						},
 						{
 							"dataset": {
 								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
-							"name": "source3"
+							"name": "Delta"
 						}
 					],
 					"sinks": [
@@ -1449,7 +1449,7 @@
 								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
-							"name": "sink2"
+							"name": "AllEmp"
 						}
 					],
 					"transformations": [
@@ -1484,7 +1484,7 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source1",
+						"     ignoreNoFilesFound: false) ~> AllEmp1",
 						"source(output(",
 						"          empname as string,",
 						"          country as string,",
@@ -1492,7 +1492,7 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source2",
+						"     ignoreNoFilesFound: false) ~> AllEmp2",
 						"source(output(",
 						"          empid as long,",
 						"          empname as string,",
@@ -1501,11 +1501,11 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source3",
-						"source1 derive(Dummy = 'XXX') ~> derivedColumn1",
+						"     ignoreNoFilesFound: false) ~> Delta",
+						"AllEmp1 derive(Dummy = 'XXX') ~> derivedColumn1",
 						"derivedColumn1 aggregate(groupBy(Dummy),",
 						"     empid = max(empid)) ~> aggregate1",
-						"source2 keyGenerate(output(empid as long),",
+						"AllEmp2 keyGenerate(output(empid as long),",
 						"     startAt: 1L,",
 						"     stepValue: 1L) ~> surrogateKey1",
 						"surrogateKey1 derive(empid = sink1#lookup('XXX').empid+empid) ~> derivedColumn2",
@@ -1517,7 +1517,7 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1, source3 union(byName: true)~> union1",
+						"select1, Delta union(byName: true)~> union1",
 						"union1 sort(asc(empid, true)) ~> sort1",
 						"aggregate1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -1533,7 +1533,7 @@
 						"     partitionFileNames:['AllEmployee.csv'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     partitionBy('hash', 1)) ~> sink2"
+						"     partitionBy('hash', 1)) ~> AllEmp"
 					]
 				}
 			},
