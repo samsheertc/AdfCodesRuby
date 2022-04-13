@@ -483,7 +483,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/8_Increment_Keys_From_Existing')]",
+			"name": "[concat(parameters('factoryName'), '/8_Increment_Keys_From_Existing1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2541,6 +2541,182 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/FlowLet')]",
+				"[concat(variables('factoryId'), '/datasets/AzureBlobCSV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/8_Increment_Keys_From_Existing')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "8. Increment Keys from Existing Source Using Mapping Data Flow in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=SHomaQlxpno&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=8&ab_channel=WafaStudies",
+				"activities": [
+					{
+						"name": "Increment_Keys_From_Existing",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Increment_Keys_From_Existing",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"AllEmp": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Input",
+										"ds_v_Blob_File": "AllEmployee.csv"
+									},
+									"Delta": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Input",
+										"ds_v_Blob_File": "DeltaEmployee.csv"
+									},
+									"AllEmpFinal": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Input",
+										"ds_v_Blob_File": "AllEmployee.csv"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "RealTIme"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Increment_Keys_From_Existing')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Increment_Keys_From_Existing')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "RealTime"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "AzureBlobCSV",
+								"type": "DatasetReference"
+							},
+							"name": "AllEmp"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureBlobCSV",
+								"type": "DatasetReference"
+							},
+							"name": "Delta"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AzureBlobCSV",
+								"type": "DatasetReference"
+							},
+							"name": "AllEmpFinal"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "surrogateKey1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "union1"
+						},
+						{
+							"name": "sort1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          empid as string,",
+						"          empname as string,",
+						"          country as string,",
+						"          department as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> AllEmp",
+						"source(output(",
+						"          empname as string,",
+						"          country as string,",
+						"          department as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Delta",
+						"AllEmp derive(Dummy = 'XXX') ~> derivedColumn1",
+						"derivedColumn1 aggregate(groupBy(Dummy),",
+						"     Maxempid = max(empid)) ~> aggregate1",
+						"aggregate1, Delta join(1 == 1,",
+						"     joinType:'cross',",
+						"     broadcast: 'auto')~> join1",
+						"join1 keyGenerate(output(empid as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> surrogateKey1",
+						"surrogateKey1 derive(empid = toString((empid+toInteger(Maxempid)))) ~> derivedColumn2",
+						"derivedColumn2 select(mapColumn(",
+						"          empid,",
+						"          empname,",
+						"          country,",
+						"          department",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1, AllEmp union(byName: true)~> union1",
+						"union1 sort(asc(empid, true)) ~> sort1",
+						"sort1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['AllEmployee.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> AllEmpFinal"
+					]
+				}
+			},
+			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureBlobCSV')]"
 			]
 		}
