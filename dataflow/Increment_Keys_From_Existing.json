@@ -1,0 +1,129 @@
+{
+	"name": "Increment_Keys_From_Existing",
+	"properties": {
+		"folder": {
+			"name": "RealTime"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "AllEmp1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "Delta"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "AllEmp2"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference"
+					},
+					"name": "AllEmp"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "sort1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as short,",
+				"          empname as string,",
+				"          country as string,",
+				"          department as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> AllEmp1",
+				"source(output(",
+				"          empname as string,",
+				"          country as string,",
+				"          department as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Delta",
+				"source(output(",
+				"          empid as long,",
+				"          empname as string,",
+				"          country as string,",
+				"          department as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> AllEmp2",
+				"AllEmp1 derive(Dummy = 'XXX') ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(Dummy),",
+				"     empid = max(empid)) ~> aggregate1",
+				"Delta keyGenerate(output(empid as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 derive(empid = sink1#lookup('XXX').empid+empid) ~> derivedColumn2",
+				"derivedColumn2 select(mapColumn(",
+				"          empid,",
+				"          empname,",
+				"          country,",
+				"          department",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1, AllEmp2 union(byName: true)~> union1",
+				"union1 sort(asc(empid, true)) ~> sort1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     keys:['Dummy'],",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink1",
+				"sort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['AllEmployee.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> AllEmp"
+			]
+		}
+	}
+}
