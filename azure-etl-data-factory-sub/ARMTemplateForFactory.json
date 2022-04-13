@@ -512,21 +512,21 @@
 										"ds_v_Blob_Directory": "Input",
 										"ds_v_Blob_File": "AllEmployee.csv"
 									},
-									"AllEmp2": {
-										"ds_v_Blob_Container": "azurecontainer",
-										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "AllEmployee.csv"
-									},
 									"Delta": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
 										"ds_v_Blob_File": "DeltaEmployee.csv"
 									},
+									"AllEmp2": {
+										"ds_v_Blob_Container": "azurecontainer",
+										"ds_v_Blob_Directory": "Input",
+										"ds_v_Blob_File": "AllEmployee.csv"
+									},
 									"sink1": {},
 									"AllEmp": {
 										"ds_v_Blob_Container": "azurecontainer",
 										"ds_v_Blob_Directory": "Input",
-										"ds_v_Blob_File": "AllEmployee.csv"
+										"ds_v_Blob_File": "cccc.csv"
 									}
 								}
 							},
@@ -1430,14 +1430,14 @@
 								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
-							"name": "AllEmp2"
+							"name": "Delta"
 						},
 						{
 							"dataset": {
 								"referenceName": "AzureBlobCSV",
 								"type": "DatasetReference"
 							},
-							"name": "Delta"
+							"name": "AllEmp2"
 						}
 					],
 					"sinks": [
@@ -1492,7 +1492,7 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> AllEmp2",
+						"     ignoreNoFilesFound: false) ~> Delta",
 						"source(output(",
 						"          empid as long,",
 						"          empname as string,",
@@ -1501,11 +1501,11 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> Delta",
+						"     ignoreNoFilesFound: false) ~> AllEmp2",
 						"AllEmp1 derive(Dummy = 'XXX') ~> derivedColumn1",
 						"derivedColumn1 aggregate(groupBy(Dummy),",
 						"     empid = max(empid)) ~> aggregate1",
-						"AllEmp2 keyGenerate(output(empid as long),",
+						"Delta keyGenerate(output(empid as long),",
 						"     startAt: 1L,",
 						"     stepValue: 1L) ~> surrogateKey1",
 						"surrogateKey1 derive(empid = sink1#lookup('XXX').empid+empid) ~> derivedColumn2",
@@ -1517,7 +1517,7 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1, Delta union(byName: true)~> union1",
+						"select1, AllEmp2 union(byName: true)~> union1",
 						"union1 sort(asc(empid, true)) ~> sort1",
 						"aggregate1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
