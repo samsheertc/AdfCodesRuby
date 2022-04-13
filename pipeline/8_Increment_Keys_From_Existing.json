@@ -4,7 +4,7 @@
 		"description": "8. Increment Keys from Existing Source Using Mapping Data Flow in Azure Data Factory\n\nhttps://www.youtube.com/watch?v=SHomaQlxpno&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=8&ab_channel=WafaStudies",
 		"activities": [
 			{
-				"name": "Increment_Keys_From_Existing_1",
+				"name": "Increment_Keys_From_Existing",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -17,10 +17,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Increment_Keys_From_Existing_1",
+						"referenceName": "Increment_Keys_From_Existing",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"AllEmp1": {
+							"AllEmp": {
 								"ds_v_Blob_Container": "azurecontainer",
 								"ds_v_Blob_Directory": "Input",
 								"ds_v_Blob_File": "AllEmployee.csv"
@@ -30,15 +30,10 @@
 								"ds_v_Blob_Directory": "Input",
 								"ds_v_Blob_File": "DeltaEmployee.csv"
 							},
-							"AllEmp2": {
+							"AllEmpFinal": {
 								"ds_v_Blob_Container": "azurecontainer",
 								"ds_v_Blob_Directory": "Input",
 								"ds_v_Blob_File": "AllEmployee.csv"
-							},
-							"AllEmp": {
-								"ds_v_Blob_Container": "azurecontainer",
-								"ds_v_Blob_Directory": "Input",
-								"ds_v_Blob_File": "cccc.csv"
 							}
 						}
 					},
