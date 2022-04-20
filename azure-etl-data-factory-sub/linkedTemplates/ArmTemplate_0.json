@@ -1384,7 +1384,7 @@
 						"     updateIf(Department=='HR')) ~> alterRow1",
 						"alterRow1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     deletable:false,",
+						"     deletable:true,",
 						"     insertable:true,",
 						"     updateable:true,",
 						"     upsertable:false,",
