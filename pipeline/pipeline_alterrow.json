@@ -22,7 +22,7 @@
 							"source1": {
 								"ds_v_Blob_Container": "azurecontainer",
 								"ds_v_Blob_Directory": "Input",
-								"ds_v_Blob_File": "Employee1.csv"
+								"ds_v_Blob_File": "Employees1.csv"
 							},
 							"sink1": {
 								"ds_v_DBName": "ENTDWDB",
