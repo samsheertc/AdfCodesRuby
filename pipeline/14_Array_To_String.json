@@ -66,7 +66,7 @@
 							"typeProperties": {
 								"variableName": "vFileList_Temp",
 								"value": {
-									"value": "@item().item.EmailIDs",
+									"value": "@item().EmailIDs",
 									"type": "Expression"
 								}
 							}
