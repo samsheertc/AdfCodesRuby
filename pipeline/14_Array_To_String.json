@@ -59,24 +59,24 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable1",
+							"name": "Set TempEmail",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "vFileList",
+								"variableName": "TempEmails",
 								"value": {
-									"value": "@concat(item().EmailIDs,';',variables('vFileList_Temp'))",
+									"value": "@concat(item().EmailIDs,';',variables('Emails'))",
 									"type": "Expression"
 								}
 							}
 						},
 						{
-							"name": "Set variable2",
+							"name": "Set Email",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "Set TempEmail",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -84,9 +84,9 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "vFileList_Temp",
+								"variableName": "Emails",
 								"value": {
-									"value": "@variables('vFileList')",
+									"value": "@variables('TempEmails')",
 									"type": "Expression"
 								}
 							}
@@ -96,10 +96,10 @@
 			}
 		],
 		"variables": {
-			"vFileList": {
+			"TempEmails": {
 				"type": "String"
 			},
-			"vFileList_Temp": {
+			"Emails": {
 				"type": "String"
 			}
 		},
