@@ -64,9 +64,29 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
+								"variableName": "vFileList",
+								"value": {
+									"value": "@concat(item().EmailIDs,';',variables('vFileList_Temp'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable2",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
 								"variableName": "vFileList_Temp",
 								"value": {
-									"value": "@item().EmailIDs",
+									"value": "@variables('vFileList')",
 									"type": "Expression"
 								}
 							}
