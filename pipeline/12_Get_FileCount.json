@@ -39,11 +39,36 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "vFileCount",
+					"value": {
+						"value": "@string(length(activity('Get Metadata1').output.childItems))",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
 			"pFiles": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"vFileCount": {
+				"type": "String"
 			}
 		},
 		"folder": {
