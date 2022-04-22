@@ -1,0 +1,48 @@
+{
+	"name": "14_Array_To_String",
+	"properties": {
+		"description": "https://www.youtube.com/watch?v=mT2AOh6kJV8&list=PLMWaZteqtEaLacN3eS3s8pw2jtwBVb1BH&index=14&ab_channel=WafaStudies",
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "AzureBlobCSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_v_Blob_Container": "azurecontainer",
+							"ds_v_Blob_Directory": "Input",
+							"ds_v_Blob_File": "Test.csv"
+						}
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"folder": {
+			"name": "RealTIme"
+		},
+		"annotations": []
+	}
+}
